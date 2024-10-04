@@ -7,7 +7,24 @@ edition = "2021"
 name = "app"
 path = "src/bin/app.rs"
 
-[dependencies]
+[workspace]
+members = [
+    "api",
+    "kernel",
+    "adapter",
+    "shared",
+    "registry",
+]
+
+[workspace.dependencies]
+adapter = { path = "./adapter" }
+api = { path = "./api" }
+async-trait = "0.1.83"
+derive-new = "0.7.0"
+kernel = { path = "./kernel" }
+registry = { path = "./registry" }
+shared = { path = "./shared" }
+
 anyhow = "1.0.89"
 axum = { version = "0.7.7", features = ["macros"] }
 sqlx = { version = "0.8.2", features = [
@@ -20,5 +37,17 @@ sqlx = { version = "0.8.2", features = [
 ] }
 tokio = { version = "1.40.0", features = ["macros", "rt-multi-thread"] }
 
-[dev-dependencies]
 rstest = "0.23.0"
+
+[dependencies]
+adapter.workspace = true
+api.workspace = true
+registry.workspace = true
+shared.workspace = true
+
+anyhow.workspace = true
+axum.workspace = true
+sqlx.workspace  = true
+tokio.workspace = true
+
+[dev-dependencies]
