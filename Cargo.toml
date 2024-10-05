@@ -8,13 +8,7 @@ name = "app"
 path = "src/bin/app.rs"
 
 [workspace]
-members = [
-    "api",
-    "kernel",
-    "adapter",
-    "shared",
-    "registry",
-]
+members = ["api", "kernel", "adapter", "shared", "registry"]
 
 [workspace.dependencies]
 adapter = { path = "./adapter" }
@@ -27,6 +21,7 @@ shared = { path = "./shared" }
 
 anyhow = "1.0.89"
 axum = { version = "0.7.7", features = ["macros"] }
+serde = { version = "1.0.210", features = ["derive"] }
 sqlx = { version = "0.8.2", features = [
     "chrono",
     "macros",
@@ -35,7 +30,9 @@ sqlx = { version = "0.8.2", features = [
     "runtime-tokio",
     "uuid",
 ] }
+thiserror = "1.0.64"
 tokio = { version = "1.40.0", features = ["macros", "rt-multi-thread"] }
+uuid = { version = "1.10.0", features = ["serde", "v4"] }
 
 rstest = "0.23.0"
 
@@ -47,7 +44,7 @@ shared.workspace = true
 
 anyhow.workspace = true
 axum.workspace = true
-sqlx.workspace  = true
+sqlx.workspace = true
 tokio.workspace = true
 
 [dev-dependencies]

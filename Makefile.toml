@@ -54,6 +54,7 @@ args = ["compose", "logs", "${@}"]
 run_task = [
     { name = [
         "compose-up-db",
+        "migrate",
         "compose-up-redis",
     ] },
 ]
