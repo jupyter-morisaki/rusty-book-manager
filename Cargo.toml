@@ -21,6 +21,9 @@ shared = { path = "./shared" }
 
 anyhow = "1.0.89"
 axum = { version = "0.7.7", features = ["macros"] }
+bcrypt = "0.15.1"
+garde = { version = "0.20.0", features = ["derive", "email"] }
+redis = { version = "0.27.2", features = ["tokio-rustls-comp"] }
 serde = { version = "1.0.210", features = ["derive"] }
 sqlx = { version = "0.8.2", features = [
     "chrono",
@@ -30,8 +33,10 @@ sqlx = { version = "0.8.2", features = [
     "runtime-tokio",
     "uuid",
 ] }
+strum = { version = "0.26.3", features = ["derive"] }
 thiserror = "1.0.64"
 tokio = { version = "1.40.0", features = ["macros", "rt-multi-thread"] }
+tracing = { version = "0.1.40", features = ["log"] }
 uuid = { version = "1.10.0", features = ["serde", "v4"] }
 
 rstest = "0.23.0"
@@ -46,5 +51,8 @@ anyhow.workspace = true
 axum.workspace = true
 sqlx.workspace = true
 tokio.workspace = true
+tower-http = { version = "0.6.1", features = ["cors", "trace"] }
+tracing.workspace = true
+tracing-subscriber = { version = "0.3.18", features = ["env-filter", "json"] }
 
 [dev-dependencies]

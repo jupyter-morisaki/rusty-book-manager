@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 kernel.workspace = true
 registry.workspace = true
+shared.workspace = true
 
 anyhow.workspace = true
 axum.workspace = true
