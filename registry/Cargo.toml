@@ -6,3 +6,4 @@ edition = "2021"
 [dependencies]
 adapter.workspace = true
 kernel.workspace = true
+shared.workspace = true

@@ -14,10 +14,12 @@ use tracing_subscriber::EnvFilter;
 
 use std::net::Ipv4Addr;
 use std::net::SocketAddr;
+use std::sync::Arc;
 
 use adapter::database::connect_database_with;
-use api::route::book::build_book_routers;
-use api::route::health::build_health_check_routers;
+use adapter::redis::RedisClient;
+use api::route::auth;
+use api::route::v1;
 use registry::AppRegistry;
 use shared::config::AppConfig;
 use shared::env::which;
@@ -32,11 +34,12 @@ async fn main() -> Result<()> {
 async fn bootstrap() -> Result<()> {
     let app_config = AppConfig::build()?;
     let pool = connect_database_with(&app_config.database);
-    let registry = AppRegistry::new(pool);
+    let kv = Arc::new(RedisClient::build(&app_config.redis)?);
+    let registry = AppRegistry::new(pool, kv, app_config);
 
     let app = Router::new()
-        .merge(build_health_check_routers())
-        .merge(build_book_routers())
+        .merge(v1::routes())
+        .merge(auth::routes())
         .layer(
             TraceLayer::new_for_http()
                 .make_span_with(DefaultMakeSpan::new().level(Level::INFO))
