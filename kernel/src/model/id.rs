@@ -64,4 +64,5 @@ macro_rules! define_id {
 }
 
 define_id!(BookId);
+define_id!(CheckoutId);
 define_id!(UserId);

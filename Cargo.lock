@@ -87,6 +87,7 @@ dependencies = [
  "anyhow",
  "axum",
  "axum-extra",
+ "chrono",
  "derive-new",
  "garde",
  "kernel",
@@ -345,6 +346,7 @@ dependencies = [
  "android-tzdata",
  "iana-time-zone",
  "num-traits",
+ "serde",
  "windows-targets 0.52.6",
 ]
 
@@ -956,6 +958,8 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "async-trait",
+ "chrono",
+ "derive-new",
  "serde",
  "shared",
  "sqlx",

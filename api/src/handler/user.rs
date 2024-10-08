@@ -11,6 +11,7 @@ use shared::error::AppError;
 use shared::error::AppResult;
 
 use crate::extractor::AuthorizedUser;
+use crate::model::checkout::CheckoutsResponse;
 use crate::model::user::CreateUserRequest;
 use crate::model::user::UpdateUserPasswordRequest;
 use crate::model::user::UpdateUserPasswordRequestWithUserId;
@@ -101,4 +102,16 @@ pub async fn change_password(
         .await?;
 
     Ok(StatusCode::OK)
+}
+
+pub async fn get_checkouts(
+    user: AuthorizedUser,
+    State(registry): State<AppRegistry>,
+) -> AppResult<Json<CheckoutsResponse>> {
+    registry
+        .checkout_repository()
+        .find_unreturned_by_user_id(user.id())
+        .await
+        .map(CheckoutsResponse::from)
+        .map(Json)
 }

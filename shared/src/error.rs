@@ -8,6 +8,8 @@ pub type AppResult<T> = Result<T, AppError>;
 #[derive(Debug, Error)]
 pub enum AppError {
     #[error("{0}")]
+    UnprocessableEntity(String),
+    #[error("{0}")]
     EntityNotFound(String),
     #[error("{0}")]
     ValidationError(#[from] garde::Report),
@@ -36,6 +38,7 @@ pub enum AppError {
 impl IntoResponse for AppError {
     fn into_response(self) -> Response {
         let status_code = match self {
+            AppError::UnprocessableEntity(_) => StatusCode::UNPROCESSABLE_ENTITY,
             AppError::EntityNotFound(_) => StatusCode::NOT_FOUND,
             AppError::ValidationError(_) | AppError::ConvertToUuidError(_) => {
                 StatusCode::BAD_REQUEST
