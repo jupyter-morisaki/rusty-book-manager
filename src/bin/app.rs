@@ -1,7 +1,10 @@
 use anyhow::Error;
 use anyhow::Result;
-use axum::routing::Router;
+use axum::http::Method;
+use axum::Router;
 use tokio::net::TcpListener;
+use tower_http::cors;
+use tower_http::cors::CorsLayer;
 use tower_http::trace::DefaultMakeSpan;
 use tower_http::trace::DefaultOnRequest;
 use tower_http::trace::DefaultOnResponse;
@@ -31,6 +34,13 @@ async fn main() -> Result<()> {
     bootstrap().await
 }
 
+fn cors() -> CorsLayer {
+    CorsLayer::new()
+        .allow_headers(cors::Any)
+        .allow_methods([Method::GET, Method::POST, Method::PUT, Method::DELETE])
+        .allow_origin(cors::Any)
+}
+
 async fn bootstrap() -> Result<()> {
     let app_config = AppConfig::build()?;
     let pool = connect_database_with(&app_config.database);
@@ -50,6 +60,7 @@ async fn bootstrap() -> Result<()> {
                         .latency_unit(LatencyUnit::Millis),
                 ),
         )
+        .layer(cors())
         .with_state(registry);
 
     let addr = SocketAddr::new(Ipv4Addr::LOCALHOST.into(), 8080);
