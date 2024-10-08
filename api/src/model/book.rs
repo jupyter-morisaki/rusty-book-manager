@@ -1,3 +1,5 @@
+use chrono::DateTime;
+use chrono::Utc;
 use derive_new::new;
 use garde::Validate;
 use serde::Deserialize;
@@ -7,11 +9,14 @@ use kernel::model::book::event::CreateBook;
 use kernel::model::book::event::UpdateBook;
 use kernel::model::book::Book;
 use kernel::model::book::BookListOptions;
+use kernel::model::book::Checkout;
 use kernel::model::id::BookId;
+use kernel::model::id::CheckoutId;
 use kernel::model::id::UserId;
 use kernel::model::list::PaginatedList;
 
 use crate::model::user::BookOwner;
+use crate::model::user::CheckoutUser;
 
 #[derive(Debug, Deserialize, Validate)]
 #[serde(rename_all = "camelCase")]
@@ -120,6 +125,7 @@ pub struct BookResponse {
     pub isbn: String,
     pub description: String,
     pub owner: BookOwner,
+    pub checkout: Option<BookCheckoutResponse>,
 }
 
 impl From<Book> for BookResponse {
@@ -131,6 +137,7 @@ impl From<Book> for BookResponse {
             isbn,
             description,
             owner,
+            checkout,
         } = value;
 
         Self {
@@ -140,6 +147,31 @@ impl From<Book> for BookResponse {
             isbn,
             description,
             owner: owner.into(),
+            checkout: checkout.map(BookCheckoutResponse::from),
+        }
+    }
+}
+
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct BookCheckoutResponse {
+    pub id: CheckoutId,
+    pub checked_out_by: CheckoutUser,
+    pub checked_out_at: DateTime<Utc>,
+}
+
+impl From<Checkout> for BookCheckoutResponse {
+    fn from(value: Checkout) -> Self {
+        let Checkout {
+            checkout_id,
+            checked_out_by,
+            checked_out_at,
+        } = value;
+
+        Self {
+            id: checkout_id,
+            checked_out_by: checked_out_by.into(),
+            checked_out_at,
         }
     }
 }
