@@ -25,6 +25,7 @@ axum = { version = "0.7.7", features = ["macros"] }
 axum-extra = { version = "0.9.4", features = ["typed-header"] }
 bcrypt = "0.15.1"
 garde = { version = "0.20.0", features = ["derive", "email"] }
+mockall = "0.13.0"
 redis = { version = "0.27.2", features = ["tokio-rustls-comp"] }
 serde = { version = "1.0.210", features = ["derive"] }
 sqlx = { version = "0.8.2", features = [
@@ -38,10 +39,10 @@ sqlx = { version = "0.8.2", features = [
 strum = { version = "0.26.3", features = ["derive"] }
 thiserror = "1.0.64"
 tokio = { version = "1.40.0", features = ["macros", "rt-multi-thread"] }
+tokio-stream = "0.1.16"
+tower = "0.5.1"
 tracing = { version = "0.1.40", features = ["log"] }
 uuid = { version = "1.10.0", features = ["serde", "v4"] }
-
-rstest = "0.23.0"
 
 [dependencies]
 adapter.workspace = true

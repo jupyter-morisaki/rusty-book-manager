@@ -7,3 +7,5 @@ edition = "2021"
 adapter.workspace = true
 kernel.workspace = true
 shared.workspace = true
+
+mockall.workspace = true

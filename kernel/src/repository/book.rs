@@ -11,6 +11,7 @@ use crate::model::id::BookId;
 use crate::model::id::UserId;
 use crate::model::list::PaginatedList;
 
+#[mockall::automock]
 #[async_trait]
 pub trait BookRepository: Send + Sync {
     async fn create(&self, event: CreateBook, user_id: UserId) -> AppResult<()>;

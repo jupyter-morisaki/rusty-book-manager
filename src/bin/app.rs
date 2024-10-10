@@ -23,7 +23,7 @@ use adapter::database::connect_database_with;
 use adapter::redis::RedisClient;
 use api::route::auth;
 use api::route::v1;
-use registry::AppRegistry;
+use registry::AppRegistryImpl;
 use shared::config::AppConfig;
 use shared::env::which;
 use shared::env::Environment;
@@ -45,7 +45,7 @@ async fn bootstrap() -> Result<()> {
     let app_config = AppConfig::build()?;
     let pool = connect_database_with(&app_config.database);
     let kv = Arc::new(RedisClient::build(&app_config.redis)?);
-    let registry = AppRegistry::new(pool, kv, app_config);
+    let registry = Arc::new(AppRegistryImpl::new(pool, kv, app_config));
 
     let app = Router::new()
         .merge(v1::routes())

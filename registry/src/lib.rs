@@ -14,8 +14,19 @@ use kernel::repository::health::HealthCheckRepository;
 use kernel::repository::user::UserRepository;
 use shared::config::AppConfig;
 
+pub type AppRegistry = Arc<dyn AppRegistryExt + Send + Sync + 'static>;
+
+#[mockall::automock]
+pub trait AppRegistryExt {
+    fn health_check_repository(&self) -> Arc<dyn HealthCheckRepository>;
+    fn book_repository(&self) -> Arc<dyn BookRepository>;
+    fn auth_repository(&self) -> Arc<dyn AuthRepository>;
+    fn user_repository(&self) -> Arc<dyn UserRepository>;
+    fn checkout_repository(&self) -> Arc<dyn CheckoutRepository>;
+}
+
 #[derive(Clone)]
-pub struct AppRegistry {
+pub struct AppRegistryImpl {
     health_check_repository: Arc<dyn HealthCheckRepository>,
     book_repository: Arc<dyn BookRepository>,
     auth_repository: Arc<dyn AuthRepository>,
@@ -23,7 +34,7 @@ pub struct AppRegistry {
     checkout_repository: Arc<dyn CheckoutRepository>,
 }
 
-impl AppRegistry {
+impl AppRegistryImpl {
     pub fn new(
         pool: ConnectionPool,
         redis_client: Arc<RedisClient>,
@@ -47,24 +58,26 @@ impl AppRegistry {
             checkout_repository,
         }
     }
+}
 
-    pub fn health_check_repository(&self) -> Arc<dyn HealthCheckRepository> {
+impl AppRegistryExt for AppRegistryImpl {
+    fn health_check_repository(&self) -> Arc<dyn HealthCheckRepository> {
         Arc::clone(&self.health_check_repository)
     }
 
-    pub fn book_repository(&self) -> Arc<dyn BookRepository> {
+    fn book_repository(&self) -> Arc<dyn BookRepository> {
         Arc::clone(&self.book_repository)
     }
 
-    pub fn auth_repository(&self) -> Arc<dyn AuthRepository> {
+    fn auth_repository(&self) -> Arc<dyn AuthRepository> {
         Arc::clone(&self.auth_repository)
     }
 
-    pub fn user_repository(&self) -> Arc<dyn UserRepository> {
+    fn user_repository(&self) -> Arc<dyn UserRepository> {
         Arc::clone(&self.user_repository)
     }
 
-    pub fn checkout_repository(&self) -> Arc<dyn CheckoutRepository> {
+    fn checkout_repository(&self) -> Arc<dyn CheckoutRepository> {
         Arc::clone(&self.checkout_repository)
     }
 }
